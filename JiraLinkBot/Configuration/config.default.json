@@ -1,0 +1,7 @@
+﻿{
+  "logFile": "log.txt",
+  "adminPin": 0,
+  "slack:apiToken": "mytokenfromslack",
+  "flickr:apiKey": "",
+  "flickr:apiSecret": ""
+}
