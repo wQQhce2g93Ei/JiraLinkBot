@@ -3,6 +3,7 @@ A simple bot that listens to Slack channels and tries to find Jira tickets and r
 
 ## Usage
 1. Clone the repository: `git clone https://github.com/wQQhce2g93Ei/JiraLinkBot.git`
+1. Build but don't run the solution (this generates the `configuration\config.json` file)
 1. Go to your Team's Slack [bot integration page](https://my.slack.com/services/new/bot).
 1. Enter 'jiralinkbot' as the Username and click the 'Add Bot Integration' button.
 1. Copy the generated API key and paste it as your `slack` `apiToken` in `configuration\config.json`:
@@ -11,8 +12,8 @@ A simple bot that listens to Slack channels and tries to find Jira tickets and r
       "apiToken": "xxxx-00000000000-xxxxxxxxxxxxxxxxxxxxxxxx"
     }    
   ```
-5. Build and run the JiraLinkBot solution.
-6. Invite @jiralinkbot to a channel and add the Jira prefixs for your projects
+6. Build and run the JiraLinkBot solution.
+7. Invite @jiralinkbot to a channel and add the Jira prefixs for your projects
   ```
     /invite @jiralinkbot
     @jiralinkbot addproject PROJ
