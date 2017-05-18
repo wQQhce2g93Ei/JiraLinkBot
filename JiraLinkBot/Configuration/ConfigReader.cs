@@ -9,6 +9,7 @@ namespace JiraLinkBot.Configuration
     public class ConfigReader : IConfigReader
     {
         private JObject _currentJObject;
+        private string _baseJiraAddress;
 
         public string SlackApiKey()
         {

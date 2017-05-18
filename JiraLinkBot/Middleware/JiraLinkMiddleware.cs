@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using JiraLinkBot.Model;
+using Noobot.Core.Configuration;
 using Noobot.Core.MessagingPipeline.Middleware;
 using Noobot.Core.MessagingPipeline.Request;
 using Noobot.Core.MessagingPipeline.Response;
@@ -15,6 +16,7 @@ namespace JiraLinkBot.Middleware
     {
         private readonly StatsPlugin _statsPlugin;
         private readonly JsonStoragePlugin _jsonStoragePlugin;
+        private readonly IConfigReader _configReader;
 
         private string _filename { get; } = "JiraProjects";
 
@@ -22,10 +24,11 @@ namespace JiraLinkBot.Middleware
         private readonly Regex _jiraAddProjectRegex = new Regex(@"addproject (\w+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _jiraRemoveProjectRegex = new Regex(@"removeproject (\w+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public JiraLinkMiddleware(IMiddleware next, JsonStoragePlugin jsonStoragePlugin, StatsPlugin statsPlugin) : base(next)
+        public JiraLinkMiddleware(IMiddleware next, JsonStoragePlugin jsonStoragePlugin, StatsPlugin statsPlugin, IConfigReader configReader) : base(next)
         {
             _jsonStoragePlugin = jsonStoragePlugin;
             _statsPlugin = statsPlugin;
+            _configReader = configReader;
 
             HandlerMappings = new[]
             {
@@ -80,7 +83,7 @@ namespace JiraLinkBot.Middleware
 
                 if (projects.Any(o => o.Name.Equals(match.Groups[1].Value, StringComparison.OrdinalIgnoreCase)))
                 {
-                    var link = "https://insitesoft.atlassian.net/browse/" + match.Value;
+                    var link = _configReader.GetConfigEntry<string>("jira:baseAddress") + match.Value;
                     if (!links.Contains(link))
                     {
                         links.Add(link);
@@ -92,7 +95,8 @@ namespace JiraLinkBot.Middleware
             {
                 var linkCount = _statsPlugin.GetStat<int>("JiraTicketLinksCreated");
                 _statsPlugin.RecordStat("JiraTicketLinksCreated", linkCount + links.Count);
-                yield return message.ReplyToChannel($"I found a Jira link for you! {string.Join(",", links)}");
+                var text = links.Count > 1 ? "I found some Jira links for you! \n" : "I found a Jira link for you! ";
+                yield return message.ReplyToChannel(text + string.Join("\n", links));
             }
         }
 
