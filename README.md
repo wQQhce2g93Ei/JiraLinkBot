@@ -22,3 +22,11 @@ A simple bot that listens to Slack channels and tries to find Jira tickets and r
 You should now be able to send messages to JiraLinkBot in your Team's Slack. Try direct messaging with `@jiralinkbot help` to see a list of commands.
 
 To extend the JiraLinkBot refer to the [Noobot documentation](https://github.com/noobot/noobot/wiki).
+
+To install as a service run these commands
+
+```
+cd JiralinkBot\bin\Release\
+.\JiraLinkBot.exe install
+.\JiraLinkBot.exe start 
+```
